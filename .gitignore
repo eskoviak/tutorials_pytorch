@@ -130,3 +130,5 @@ cleanup.sh
 
 # pyspelling
 dictionary.dic
+
+data/

@@ -26,6 +26,9 @@ import numpy as np
 import matplotlib.pyplot as plt
 from torch.utils.data import Dataset, DataLoader
 from torchvision import transforms, utils
+from pathlib import Path
+
+data = Path('/Users/edmundlskoviak/iCloud/Data Sets')
 
 # Ignore warnings
 import warnings
@@ -63,7 +66,7 @@ plt.ion()   # interactive mode
 # annotations in an (L, 2) array ``landmarks`` where L is the number of landmarks in that row.
 #
 
-landmarks_frame = pd.read_csv('data/faces/face_landmarks.csv')
+landmarks_frame = pd.read_csv( data / 'faces' / 'face_landmarks.csv')
 
 n = 65
 img_name = landmarks_frame.iloc[n, 0]
@@ -74,6 +77,7 @@ print('Image name: {}'.format(img_name))
 print('Landmarks shape: {}'.format(landmarks.shape))
 print('First 4 Landmarks: {}'.format(landmarks[:4]))
 
+input('Press enter to continue (Load initial data)')
 
 ######################################################################
 # Let's write a simple helper function to show an image and its landmarks
@@ -87,10 +91,12 @@ def show_landmarks(image, landmarks):
     plt.pause(0.001)  # pause a bit so that plots are updated
 
 plt.figure()
-show_landmarks(io.imread(os.path.join('data/faces/', img_name)),
-               landmarks)
+#show_landmarks(io.imread(os.path.join('data/faces/', img_name)),
+#              landmarks)
+show_landmarks(io.imread( data / 'faces' / img_name), landmarks)
 plt.show()
 
+input('Press enter to continue (Show landmarks)')
 
 ######################################################################
 # Dataset class
@@ -157,8 +163,10 @@ class FaceLandmarksDataset(Dataset):
 # will print the sizes of first 4 samples and show their landmarks.
 #
 
-face_dataset = FaceLandmarksDataset(csv_file='data/faces/face_landmarks.csv',
-                                    root_dir='data/faces/')
+#face_dataset = FaceLandmarksDataset(csv_file='data/faces/face_landmarks.csv',
+#                                    root_dir='data/faces/')
+face_dataset = FaceLandmarksDataset(csv_file=( data / 'faces' / 'face_landmarks.csv'),
+                                    root_dir=( data / 'faces'))
 
 fig = plt.figure()
 
@@ -175,7 +183,7 @@ for i, sample in enumerate(face_dataset):
         plt.show()
         break
 
-
+input('Press enter to continue (create custom dataset)')
 ######################################################################
 # Transforms
 # ----------
@@ -325,6 +333,8 @@ for i, tsfrm in enumerate([scale, crop, composed]):
 
 plt.show()
 
+input('Press enter to continue (Transform/Compose)')
+
 
 ######################################################################
 # Iterating through the dataset
@@ -343,8 +353,8 @@ plt.show()
 # loop as before.
 #
 
-transformed_dataset = FaceLandmarksDataset(csv_file='data/faces/face_landmarks.csv',
-                                           root_dir='data/faces/',
+transformed_dataset = FaceLandmarksDataset(csv_file=( data / 'faces' / 'face_landmarks.csv'),
+                                           root_dir=( data / 'faces/'),
                                            transform=transforms.Compose([
                                                Rescale(256),
                                                RandomCrop(224),
